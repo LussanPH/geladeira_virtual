@@ -1,0 +1,14 @@
+services:
+  geladeira_virtual:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=senha1234
+      - POSTGRES_DB=geladeira_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
