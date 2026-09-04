@@ -1,23 +1,19 @@
 from django.db import models
-
-class Usuarios(models.Model):
-    nome = models.CharField(max_length=100)
-    email = models.EmailField(unique=True, max_length=100)
-    senha = models.CharField(max_length=30)
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 
 
-class Anamnese(models.Model):
-    fk_usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
-    alergias = models.JSONField(default=list)  #Aceita tanto listas [] como dicionários
-    estilo_alimentar = models.CharField(max_length=30)
-    alimentos_bons = models.JSONField(default=list)
-    alimentos_ruins = models.JSONField(default=list)
-    comobirdades = models.JSONField(default=list)
+class Usuarios(AbstractUser):
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'email'
+
+    REQUIRED_FIELDS = ['username', 'password']
 
 
 class NotasFiscais(models.Model):
     chave_acesso = models.IntegerField(primary_key=True)
-    fk_usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    fk_usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     data_compra = models.DateTimeField(null=False)
     valor_total = models.FloatField()
     cnpj = models.IntegerField()
